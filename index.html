@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Espresso Grid Demo</title>
+
+	<link rel="stylesheet" href="styles/cosmos-bootstrap.css"/>
+	<style>
+		iframe{ width:100%; height:400px; border:none; }
+		.style-editor{ width:100%; height:200px; }
+	</style>
+
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="http://a08c52f.ngrok.com/mdh/espresso/espresso-block/espresso-grid.min.js"></script>
+	<script>
+		var grid = espressoGrid.init({
+			id: 'uniqueID',
+			auth: {
+				username: 'demo',
+				password: 'Password1',
+				apiBase: 'https://eval.espressologic.com/rest/livedemo/demo/v1',
+				endpoint: 'customer'
+			}
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row controls">
+			<div class="col-xs-6">
+				<input id="filter-all" class="filter-all" name="pay-filter" type="radio" checked="checked" value=""/> <label for="filter-all">All</label> |
+				<input id="filter-paid" class="filter-paid" name="pay-filter" type="radio" value="1"/> <label for="filter-paid">Paid</label> |
+				<input id="filter-unpaid" class="filter-unpaid" name="pay-filter" type="radio" value="0"/> <label for="filter-unpaid">Unpaid</label>
+			</div>
+			<div class="col-xs-6 form-inline">
+				<label>Amount Greater Than: </label> <input class="minimum-amount-total form-control" type="number" value="" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<iframe id="grid-demo" src="http://a08c52f.ngrok.com/mdh/espresso/espresso-block/?gridID=grid-demo"></iframe>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-6">
+				<textarea class="style-editor"></textarea>
+				<button class="btn btn-default">Apply Styles</button>
+			</div>
+			<div class="col-xs-6">
+				<div class="column-controls"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
