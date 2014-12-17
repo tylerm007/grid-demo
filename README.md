@@ -1,10 +1,11 @@
 #Grid Demo
 
-A sample of interactions made possible with [Espresso Grid](http://github.com/EspressoLogicCafe/espresso-grid) using an Espresso Logic API. We are using a read-only, public project, to do more with your grid, register @ [Espresso Logic](http://espressologic.com).
+A sample of interactions made possible with [Espresso Grid](http://github.com/EspressoLogicCafe/espresso-grid) using an Espresso Logic API. This ready to demo public project, and as a result is read-only, to do more with your grid, register @ [Espresso Logic](http://espressologic.com).
 
 ### Filtering
-Espresso Grids by default have searches enabled, and demonstrated in our example here are several pre-configured searches that make sense when trying to filter purchase orders: paid/unpaid, or by an amount total. After initializing the grid, the container listens for the "GridReady" event.
+Espresso Grids by default have enable searches, and demonstrated in our html example are several pre-configured searches that make sense when trying to filter purchase orders: paid/unpaid, or by an amount total. After initializing the grid, the container listens for the "GridReady" event.
 ```javascript
+var state;
 grid.on('GridReady', function (event, data) {
 	//state.operators is an array of our search operators
 	//state.table.named will contain our collection of searchable columns

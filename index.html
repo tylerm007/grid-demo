@@ -17,7 +17,7 @@
 			auth: {
 				username: 'demo',
 				password: 'Password1',
-				apiBase: 'https://demodev.espressologic.com/rest/el-dev/demo/v1',
+				apiBase: 'https://eval.espressologic.com/rest/livedemo/demo/v1',
 				endpoint: 'PurchaseOrder'
 			},
 			controls: { save:false, insert:false, del:false, undo:false } //because this is a readonly example
@@ -103,10 +103,32 @@
 			//broadcast to the grid the new column definitions array
 			grid.broadcast('ControlColumnDefinitions', colDefs);
 		}
+
+		//Grid Selected Row listener
+		grid.on('EventRowSelected', function (event, row) {
+			console.log(row);
+			var attributes = '';
+			$.each(row, function (index, attribute) {
+				if (index === '@metadata') { return; }
+				attributes += '<p><strong>' + index + '</strong>: <span>' + attribute + '</span></p>';
+			});
+			$('.grid-selected-row div').html($(attributes));
+		});
 	</script>
 </head>
 <body>
 	<div class="container">
+		<div class="row">
+			<div class="col-sm-6">
+				<h1>Espresso Grid Demo</h1>
+			</div>
+			<div class="col-sm-6">
+				<div style="float:right; padding:20px 0;">
+					<a href="http://docs.espressologic.com/espresso-grid">Complete Documentation</a>
+				</div>
+			</div>
+		</div>
+		<br/>
 		<div class="row controls">
 			<div class="col-xs-6">
 				<input id="filter-all" onclick="gridFilter();" name="pay-filter" type="radio" checked="checked" value=""/> <label for="filter-all">All</label> |
@@ -127,12 +149,16 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-xs-6">
+			<div class="col-sm-4 grid-selected-row">
+				<h4>Selected Row</h4>
+				<div></div>
+			</div>
+			<div class="col-sm-4">
 				<h4>CSS</h4>
 				<textarea class="style-editor">.grid{  }</textarea>
 				<button onclick="broadcastStyles();" class="btn btn-default">Apply Styles</button>
 			</div>
-			<div class="col-xs-6">
+			<div class="col-sm-4">
 				<h4>Visible Columns</h4>
 				<div class="column-controls"></div>
 			</div>
