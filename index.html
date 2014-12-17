@@ -106,7 +106,6 @@
 
 		//Grid Selected Row listener
 		grid.on('EventRowSelected', function (event, row) {
-			console.log(row);
 			var attributes = '';
 			$.each(row, function (index, attribute) {
 				if (index === '@metadata') { return; }
@@ -123,7 +122,7 @@
 				<h1>Espresso Grid Demo</h1>
 			</div>
 			<div class="col-sm-6">
-				<div style="float:right; padding:20px 0;">
+				<div style="float:right; padding:30px 0;">
 					<a href="http://docs.espressologic.com/espresso-grid">Complete Documentation</a>
 				</div>
 			</div>
