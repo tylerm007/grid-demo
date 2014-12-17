@@ -10,42 +10,130 @@
 	</style>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="http://a08c52f.ngrok.com/mdh/espresso/espresso-block/espresso-grid.min.js"></script>
+	<script type="text/javascript" src="http://eval.espressologic.com/grid/espresso-grid.min.js"></script>
 	<script>
 		var grid = espressoGrid.init({
-			id: 'uniqueID',
+			id: 'grid-demo',
 			auth: {
 				username: 'demo',
 				password: 'Password1',
-				apiBase: 'https://eval.espressologic.com/rest/livedemo/demo/v1',
-				endpoint: 'customer'
-			}
+				apiBase: 'https://demodev.espressologic.com/rest/el-dev/demo/v1',
+				endpoint: 'PurchaseOrder'
+			},
+			controls: { save:false, insert:false, del:false, undo:false } //because this is a readonly example
 		});
+		var state = {};
+		grid.on('GridReady', function (event, data) {
+			state = data;
+		});
+
+		//Filter All/Paid/Unpaid
+		function gridFilter(paidStatus) {
+			var columns = state.table.named;
+			if (typeof paidStatus === 'undefined') {
+				//run an empty search
+				grid.broadcast('ControlRunSearch', []);
+			}
+
+			//using the equals operator (state.operators[3])
+			if (paidStatus === true) {
+				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[3], text: true}]);
+			}
+			if (paidStatus === false) {
+				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[3], text: false}]);
+			}
+		}
+
+		//Filter using the greater than operator
+		function filterByMinimumAmount() {
+			var $el, value;
+			$el = $('.minimum-amount-total');
+			value = $el.val();
+
+			if (value) {
+				grid.broadcast('ControlRunSearch', [{column: state.table.named['amount_total'], operator: state.operators[1], text: value}]);
+			}
+		}
+
+		//Custom Styles Example
+		function broadcastStyles() {
+			var $el, styles;
+			$el = $('.style-editor');
+			styles = $el.val();
+			console.log(styles);
+			grid.broadcast('ControlRawCSS', styles);
+		}
+
+		//Visible Columns Example
+		var colDefs = [];
+		var colDefBin = {};
+		grid.on('EventColumnsRefreshed', function (event, data) {
+			if (colDefs.length) {return;} //columns already defined, stop listening
+			colDefs = data;
+			var columnEls = '';
+			$.each(colDefs, function (index, column) {
+				columnEls += '<fieldset>' +
+					'<input id="' + column.field + '" onclick="toggleColumn(event, this);" value="' + column.field + '" type="checkbox" checked="CHECKED" /> ' +
+						'<label for="' + column.field + '">' + column.displayName + '</label>' +
+				'</fieldset>';
+			});
+			$('.column-controls').html($(columnEls));
+		});
+		function toggleColumn(event, el) {
+			var $el, value, checked;
+			$el = $(el);
+			value = $el.val();
+			checked = $el.is(':checked');
+
+			if (checked) {
+				//it was re-checked, add it to the column definitions
+				colDefs.push(colDefBin[value]);
+			}
+			else {
+				//it was unchecked, splice it from the colDef broadcast
+				$.each(colDefs, function (index, column) {
+					if (!column) {return;}
+					if (column.field === value) {
+						var old = colDefs.splice(index, 1)[0];
+						colDefBin[value] = old;
+					}
+				});
+			}
+
+			//broadcast to the grid the new column definitions array
+			grid.broadcast('ControlColumnDefinitions', colDefs);
+		}
 	</script>
 </head>
 <body>
 	<div class="container">
 		<div class="row controls">
 			<div class="col-xs-6">
-				<input id="filter-all" class="filter-all" name="pay-filter" type="radio" checked="checked" value=""/> <label for="filter-all">All</label> |
-				<input id="filter-paid" class="filter-paid" name="pay-filter" type="radio" value="1"/> <label for="filter-paid">Paid</label> |
-				<input id="filter-unpaid" class="filter-unpaid" name="pay-filter" type="radio" value="0"/> <label for="filter-unpaid">Unpaid</label>
+				<input id="filter-all" onclick="gridFilter();" name="pay-filter" type="radio" checked="checked" value=""/> <label for="filter-all">All</label> |
+				<input id="filter-paid" onclick="gridFilter(true);" name="pay-filter" type="radio" value="1"/> <label for="filter-paid">Paid</label> |
+				<input id="filter-unpaid" onclick="gridFilter(false);" name="pay-filter" type="radio" value="0"/> <label for="filter-unpaid">Unpaid</label>
 			</div>
-			<div class="col-xs-6 form-inline">
-				<label>Amount Greater Than: </label> <input class="minimum-amount-total form-control" type="number" value="" />
+			<div class="col-xs-6">
+				<div class="input-group form-inline">
+					<label class="input-group-addon">Amount Greater Than: </label>
+					<input class="minimum-amount-total form-control" type="number" value="" />
+					<span onclick="filterByMinimumAmount();" class="input-group-addon btn btn-default">Search</span>
+				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<iframe id="grid-demo" src="http://a08c52f.ngrok.com/mdh/espresso/espresso-block/?gridID=grid-demo"></iframe>
+				<iframe id="grid-demo" src="http://eval.espressologic.com/grid/?gridID=grid-demo"></iframe>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-xs-6">
-				<textarea class="style-editor"></textarea>
-				<button class="btn btn-default">Apply Styles</button>
+				<h4>CSS</h4>
+				<textarea class="style-editor">.grid{  }</textarea>
+				<button onclick="broadcastStyles();" class="btn btn-default">Apply Styles</button>
 			</div>
 			<div class="col-xs-6">
+				<h4>Visible Columns</h4>
 				<div class="column-controls"></div>
 			</div>
 		</div>
