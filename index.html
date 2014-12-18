@@ -37,10 +37,10 @@
 
 			//using the equals operator (state.operators[3])
 			if (paidStatus === true) {
-				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[3], text: true}]);
+				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[5], text: true}]);
 			}
 			if (paidStatus === false) {
-				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[3], text: false}]);
+				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[5], text: false}]);
 			}
 		}
 
@@ -51,7 +51,7 @@
 			value = $el.val();
 
 			if (value) {
-				grid.broadcast('ControlRunSearch', [{column: state.table.named['amount_total'], operator: state.operators[1], text: value}]);
+				grid.broadcast('ControlRunSearch', [{column: state.table.named['amount_total'], operator: state.operators[3], text: value}]);
 			}
 		}
 
