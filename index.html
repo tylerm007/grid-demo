@@ -20,6 +20,7 @@
 				apiBase: 'https://eval.espressologic.com/rest/livedemo/demo/v1',
 				endpoint: 'PurchaseOrder'
 			},
+			gridOptions: {multiSelect:false},
 			controls: { save:false, insert:false, del:false, undo:false } //because this is a readonly example
 		});
 		var state = {};
@@ -53,15 +54,25 @@
 			if (value) {
 				grid.broadcast('ControlRunSearch', [{column: state.table.named['amount_total'], operator: state.operators[3], text: value}]);
 			}
+			else {
+				grid.broadcast('ControlRunSearch', []);
+			}
 		}
+		function clearMinimumAmount() { $('.minimum-amount-total').val(''); }
 
 		//Custom Styles Example
 		function broadcastStyles() {
 			var $el, styles;
 			$el = $('.style-editor');
 			styles = $el.val();
-			console.log(styles);
 			grid.broadcast('ControlRawCSS', styles);
+		}
+		function generateStyles() {
+			var styles = '.grid .ngCellText{ background:#AED8C5; }\n';
+			styles += '.grid .generic-type-number{ background:#C7D9E8; }\n';
+			styles += '.grid .ngHeaderSortColumn { background:#C78BD3; }\n';
+			styles += '.grid .gridFooter button { color: white; background: #474747; border: 1px solid #545454; }\n';
+			$('.style-editor').val(styles);
 		}
 
 		//Visible Columns Example
@@ -113,6 +124,9 @@
 			});
 			$('.grid-selected-row div').html($(attributes));
 		});
+		grid.on('EventRowDeselected', function (event, row) {
+			$('.grid-selected-row div').html('');
+		});
 	</script>
 </head>
 <body>
@@ -123,7 +137,7 @@
 			</div>
 			<div class="col-sm-6">
 				<div style="float:right; padding:30px 0;">
-					<a href="http://docs.espressologic.com/espresso-grid">Complete Documentation</a>
+					<a target="_blank" href="http://docs.espressologic.com/espresso-grid">Complete Documentation</a>
 				</div>
 			</div>
 		</div>
@@ -139,6 +153,7 @@
 					<label class="input-group-addon">Amount Greater Than: </label>
 					<input class="minimum-amount-total form-control" type="number" value="" />
 					<span onclick="filterByMinimumAmount();" class="input-group-addon btn btn-default">Search</span>
+					<span onclick="clearMinimumAmount();" class="input-group-addon btn btn-default">Clear</span>
 				</div>
 			</div>
 		</div>
@@ -155,6 +170,7 @@
 			<div class="col-sm-4">
 				<h4>CSS</h4>
 				<textarea class="style-editor">.grid{  }</textarea>
+				<button onclick="generateStyles();" class="btn btn-default">Generate Styles</button>
 				<button onclick="broadcastStyles();" class="btn btn-default">Apply Styles</button>
 			</div>
 			<div class="col-sm-4">
