@@ -1,6 +1,8 @@
 #Grid Demo
 
-A sample of interactions made possible with [Espresso Grid](http://github.com/EspressoLogicCafe/espresso-grid) using an Espresso Logic API. This is a demo public project, and as a result is read-only, to do more with your grid, register @ [Espresso Logic](http://espressologic.com).
+A sample of interactions made possible with [Espresso Grid](http://github.com/EspressoLogicCafe/espresso-grid) using an Espresso Logic API. This is a demo public project, and as a result is read-only, to do more with your grid, register @ [Espresso Logic](http://espressologic.com). [Click here](http://docs.espressologic.com/espresso-grid) for complete documentation.
+
+/*here is what you should do: pull project, put in webserver or load up from index.html*/
 
 ### Filtering
 Espresso Grids by default have enabled searches, and demonstrated in our html example are several pre-configured searches that make sense when trying to filter purchase orders: paid/unpaid, or by an amount total. After initializing the grid, the container listens for the "GridReady" event.
@@ -20,20 +22,22 @@ var filterOjbect = {
 	operator: state.operators[3], //equals operator object
 	text: searchValue
 };
-grid.broadcast('ControlRunSearch', [filterObject])
+grid.broadcast('ControlRunSearch', [filterObject, secondFilter, ...]);
 ```
 
 ###Custom Styles
 Espresso Grids also listen for styles from the parent, either by passing css hrefs on initialization:
 ```javascript
 var grid = espressoGrid.init({
-	css: { fileHandle: 'href' }	
+	css: { bootstrap: '//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css' }	
 });
 ```
 Or as shown in the html example provided by broadcasts to the "ControlRawCSS" event
 ```javascript
-grid.broadcast('ControlRawCSS', styles);
+grid.broadcast('ControlRawCSS', '.grid .gridFooter button{ background: #555; }');
 ```
+For more on styling, visit our [documentation](http://docs.espressologic.com/espresso-grid/grid-styling).
+
 
 ###Column Definitions
 Columns can also be defined on initialization, though sometimes it may be preferred to add or remove columns after start up. In this demo, we do the latter by listening for "EventColumnsRefreshed" event, which broadcasts an array of column definitions whenever they have changed. Then in the container, a user can optionally check or uncheck a column, which is broadcast back to Espresso Grid on the fly.

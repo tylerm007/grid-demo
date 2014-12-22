@@ -36,12 +36,12 @@
 				grid.broadcast('ControlRunSearch', []);
 			}
 
-			//using the equals operator (state.operators[3])
+			//using the equals operator
 			if (paidStatus === true) {
-				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[5], text: true}]);
+				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators.equals, text: true}]);
 			}
 			if (paidStatus === false) {
-				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators[5], text: false}]);
+				grid.broadcast('ControlRunSearch', [{column: columns['paid'], operator: state.operators.equals, text: false}]);
 			}
 		}
 
@@ -52,7 +52,7 @@
 			value = $el.val();
 
 			if (value) {
-				grid.broadcast('ControlRunSearch', [{column: state.table.named['amount_total'], operator: state.operators[3], text: value}]);
+				grid.broadcast('ControlRunSearch', [{column: state.table.named['amount_total'], operator: state.operators.greater, text: value}]);
 			}
 			else {
 				grid.broadcast('ControlRunSearch', []);
@@ -159,7 +159,8 @@
 		</div>
 		<div class="row">
 			<div class="col-xs-12">
-				<iframe id="grid-demo" src="http://eval.espressologic.com/grid/?gridID=grid-demo"></iframe>
+				<!--<iframe id="grid-demo" src="http://eval.espressologic.com/grid/?gridID=grid-demo"></iframe>-->
+				<iframe id="grid-demo" src="http://localhost/mdh/espresso/espresso-block/?gridID=grid-demo"></iframe>
 			</div>
 		</div>
 		<div class="row">
@@ -170,7 +171,7 @@
 			<div class="col-sm-4">
 				<h4>CSS</h4>
 				<textarea class="style-editor">.grid{  }</textarea>
-				<button onclick="generateStyles();" class="btn btn-default">Generate Styles</button>
+				<button onclick="generateStyles();" class="btn btn-default">Example Styles</button>
 				<button onclick="broadcastStyles();" class="btn btn-default">Apply Styles</button>
 			</div>
 			<div class="col-sm-4">
